@@ -995,7 +995,7 @@ def show_books():
     st.markdown("<br>", unsafe_allow_html=True)
     c1, c2 = st.columns(2)
     with c1:
-        if st.button("🔥 Top 30 Books"):
+        if st.button("🔥 Top 50 Books"):
             st.session_state.book_page = "popular"
     with c2:
         if st.button("🎯 Recommend Books"):
