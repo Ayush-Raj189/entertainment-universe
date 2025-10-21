@@ -12,7 +12,6 @@ import os
 from dotenv import load_dotenv
 import gdown
 
-
 def download_models():
     files_to_download = {
         'movie_dict.pkl': '1XqtJQcvY8PCV8K3jfEJpsQD03KQIGGs3',
@@ -33,7 +32,7 @@ def download_models():
         if not os.path.exists(filename):
             print(f"File {filename} missing. Downloading...")
             url = f'https://drive.google.com/uc?id={file_id}'
-            gdown.download(url, filename, quiet=False)
+            gdown.download(url, filename, quiet=False,fuzzy=True)
         else:
             print(f"File {filename} already exists, skipping.")
 
