@@ -10,9 +10,7 @@ from spotipy.oauth2 import SpotifyClientCredentials
 import html
 import os
 from dotenv import load_dotenv
-
 import gdown
-import os
 
 def download_models():
     files_to_download = {
@@ -26,16 +24,20 @@ def download_models():
         'anime.pkl': '1KdEkIws74Y0keZgFwQhq4jSRYd1tOjAZ',
         'similarity_anime.pkl': '1Im4PX3-7-7H2MhryiJc1JV6wPt7SLzvJ',
         'anime_indices.pkl': '19Zdc2HY-pnFo84LKy8h37zwbOK9_6LDY',
-        'rating.csv': '1Im4PX3-7-7H2MhryiJc1JV6wPt7SLzvJ',  # Use correct file ID for CSV!
+        'rating.csv': '1umrFSHn3ynilNoYJIXddJo89UcwkhTZC', 
         'games.pkl': '1vr3qOYqW28RsPrqw1wXHVmp2DpWAITSw',
         'cosine_sim.pkl': '1XlD36Oq7BzNkfBVObQ_QLjb10GslLBQo'
     }
     for filename, file_id in files_to_download.items():
         if not os.path.exists(filename):
+            print(f"File {filename} missing. Downloading...")
             url = f'https://drive.google.com/uc?id={file_id}'
             gdown.download(url, filename, quiet=False)
+        else:
+            print(f"File {filename} already exists, skipping.")
 
 download_models()
+
 
 
 # Load environment variables
