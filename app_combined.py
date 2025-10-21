@@ -14,10 +14,17 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-# Get API keys from environment variables
-SPOTIFY_CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID', '5d63c8dd552d458d84c1db09fb2aa897')
-SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET', '55422e4759a541a2ad3625e83a88bd8e')
-TMDB_API_KEY = os.getenv('TMDB_API_KEY', '84f51736bbe0caea6e528d85d1a56234')
+# Get API keys from environment variables or Streamlit secrets
+try:
+    # Try Streamlit secrets first (for deployment)
+    SPOTIFY_CLIENT_ID = st.secrets.get("SPOTIFY_CLIENT_ID", os.getenv('SPOTIFY_CLIENT_ID', '5d63c8dd552d458d84c1db09fb2aa897'))
+    SPOTIFY_CLIENT_SECRET = st.secrets.get("SPOTIFY_CLIENT_SECRET", os.getenv('SPOTIFY_CLIENT_SECRET', '55422e4759a541a2ad3625e83a88bd8e'))
+    TMDB_API_KEY = st.secrets.get("TMDB_API_KEY", os.getenv('TMDB_API_KEY', '84f51736bbe0caea6e528d85d1a56234'))
+except:
+    # Fallback to environment variables (for local development)
+    SPOTIFY_CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID', '5d63c8dd552d458d84c1db09fb2aa897')
+    SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET', '55422e4759a541a2ad3625e83a88bd8e')
+    TMDB_API_KEY = os.getenv('TMDB_API_KEY', '84f51736bbe0caea6e528d85d1a56234')
 
 # ============================ Page Config and CSS ============================
 
@@ -799,17 +806,17 @@ if 'page' not in st.session_state:
 # ============================ Sidebar Navigation ===============================
 with st.sidebar:
     st.markdown("### 🎬 Navigation")
-    if st.button("🏠 Home", use_container_width=True):
+    if st.button("🏠 Home", width="stretch"):
         st.session_state.page = 'home'
-    if st.button("🎬 Movie Recommender", use_container_width=True):
+    if st.button("🎬 Movie Recommender", width="stretch"):
         st.session_state.page = 'movies'
-    if st.button("📚 Books Recommender", use_container_width=True):
+    if st.button("📚 Books Recommender", width="stretch"):
         st.session_state.page = 'books'
-    if st.button("🎵 Music Recommender", use_container_width=True):
+    if st.button("🎵 Music Recommender", width="stretch"):
         st.session_state.page = 'music'
-    if st.button("🎌 Anime Recommender", use_container_width=True):
+    if st.button("🎌 Anime Recommender", width="stretch"):
         st.session_state.page = 'anime'
-    if st.button("🎮 Game Recommender", use_container_width=True):
+    if st.button("🎮 Game Recommender", width="stretch"):
         st.session_state.page = 'games'
 
 
@@ -944,7 +951,7 @@ def show_movies():
                     with col:
                         st.markdown(f'<div class="item-title">{names[idx]}</div>', unsafe_allow_html=True)
                         if posters[idx]:
-                            st.image(posters[idx], use_container_width=True)
+                            st.image(posters[idx], width="stretch")
                         else:
                             st.markdown('<div class="placeholder-image">🎬</div>', unsafe_allow_html=True)
     except FileNotFoundError:
@@ -1079,7 +1086,7 @@ def get_song_album_cover(song_name, artist_name):
     except:
         return "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=400&h=600&fit=crop"
 
-def recommend_music(song, music, similarity):w
+def recommend_music(song, music, similarity):
     if song not in music['song'].values:
         return [], []
     index = music[music['song'] == song].index[0]
@@ -1115,7 +1122,7 @@ def show_music():
                 for idx, col in enumerate(cols):
                     with col:
                         st.markdown(f'<div class="item-title">{names[idx]}</div>', unsafe_allow_html=True)
-                        st.image(posters[idx], use_container_width=True)
+                        st.image(posters[idx], width="stretch")
     except FileNotFoundError:
         st.error("Music data files not found. Please ensure 'df.pkl' and 'similarity.pkl' are in the directory.")
 
@@ -1182,7 +1189,7 @@ def show_anime():
         cols = st.columns(5)
         for i, (_, row) in enumerate(top_popular.iterrows()):
             with cols[i % 5]:
-                st.image(fetch_poster(row['name']), caption=row['name'], use_container_width=True)
+                st.image(fetch_poster(row['name']), caption=row['name'], width="stretch")
 
     elif st.session_state.anime_page == "recommend":
         st.header("🎯 Find Similar Anime by Genre")
@@ -1193,7 +1200,7 @@ def show_anime():
                 cols = st.columns(5)
                 for i, (name, poster) in enumerate(zip(names, posters)):
                     with cols[i % 5]:
-                        st.image(poster, caption=name, use_container_width=True)
+                        st.image(poster, caption=name, width="stretch")
             else:
                 st.warning("No similar anime found.")
                 
@@ -1254,7 +1261,7 @@ def show_games():
                         for idx, col in enumerate(cols):
                             with col:
                                 st.markdown(f'<div class="item-title">{names[idx]}</div>', unsafe_allow_html=True)
-                                st.image(thumbs[idx], use_container_width=True)
+                                st.image(thumbs[idx], width="stretch")
                     else:
                         st.warning("No similar games found.")
 
