@@ -864,24 +864,58 @@ def show_home():
     </div>
     """, unsafe_allow_html=True)
 
-   def show_home():
-    carousel_images = [
-        ("https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1200&h=400&fit=crop", "🎬 Movies"),
-        ("https://images.unsplash.com/photo-1524578271613-d550eacf6090?w=1200&h=400&fit=crop", "📚 Books"),
-        ("https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=1200&h=400&fit=crop", "🎵 Music"),
-        ("https://images.unsplash.com/photo-1578632767115-351597cf2477?w=1200&h=400&fit=crop", "🎌 Anime"),
-        ("https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=1200&h=400&fit=crop", "🎮 Games"),
-    ]
-
-    count = st_autorefresh(interval=3000, limit=None, key="autorefresh")
-    carousel_index = count % len(carousel_images)
-    current_img_url, current_caption = carousel_images[carousel_index]
-
-    st.markdown(f"""
-    <div class="header-image-container">
-        <img src="{current_img_url}" alt="{current_caption}">
+    st.markdown("""
+    <div class="hero-banner">
+        <h1 class="hero-main-title">
+            <span class="emoji-float">🎬</span> 
+            Entertainment Universe 
+            <span class="emoji-float">🎮</span>
+        </h1>
+        <div class="hero-subtitle-box">
+            <p class="hero-welcome">Welcome to Your Ultimate Entertainment Hub!</p>
+            <p class="hero-description">
+                Discover personalized recommendations across 
+                <span class="highlight-text">movies</span>, 
+                <span class="highlight-text">books</span>, 
+                <span class="highlight-text">music</span>, 
+                <span class="highlight-text">anime</span>, and 
+                <span class="highlight-text">games</span>
+            </p>
+        </div>
+        <div class="decorative-line"></div>
     </div>
     """, unsafe_allow_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    st.markdown("### ✨ What We Offer")
+    cols = st.columns(3)
+    features = [
+        ("🎯", "Smart Recommendations", "AI-powered suggestions based on your preferences"),
+        ("🌟", "Trending Content", "Discover what's popular right now"),
+        ("🎨", "Beautiful Interface", "Enjoy a seamless and elegant experience"),
+    ]
+    for col, (icon, title, desc) in zip(cols, features):
+        col.markdown(f"""
+        <div class="feature-card">
+            <div style="font-size:48px;">{icon}</div>
+            <div style="color:white;font-size:1.5rem;font-weight:bold;">{title}</div>
+            <div style="color:rgba(255,255,255,0.7);">{desc}</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown("### 🎪 Browse by Category")
+    cat_cols = st.columns(2)
+    left_cats = [("🎬", "Movies", "Get personalized movie recommendations."),
+                 ("🎵", "Music", "Discover new songs similar to your favorites."),
+                 ("🎮", "Games", "Find free-to-play games you'll love.")]
+    right_cats = [("📚", "Books", "Explore trending books and personalized reads."),
+                  ("🎌", "Anime", "Find anime similar to your favorites.")]
+
+    for icon, title, desc in left_cats:
+        cat_cols[0].markdown(f"<div class='feature-card'><div style='font-size:48px;'>{icon}</div><div style='color:white;font-weight:bold;'>{title}</div><div style='color:#ccc;'>{desc}</div></div>", unsafe_allow_html=True)
+    for icon, title, desc in right_cats:
+        cat_cols[1].markdown(f"<div class='feature-card'><div style='font-size:48px;'>{icon}</div><div style='color:white;font-weight:bold;'>{title}</div><div style='color:#ccc;'>{desc}</div></div>", unsafe_allow_html=True)
+
 
 @lru_cache(maxsize=5000)
 def fetch_movie_poster(movie_id):
