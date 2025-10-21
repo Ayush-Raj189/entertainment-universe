@@ -11,6 +11,33 @@ import html
 import os
 from dotenv import load_dotenv
 
+import gdown
+import os
+
+def download_models():
+    files_to_download = {
+        'movie_dict.pkl': '1XqtJQcvY8PCV8K3jfEJpsQD03KQIGGs3',
+        'similarity.pkl': '1FycweAkXpOthRgAH5Ll6N8Oj5EuRquxS',
+        'popular.pkl': '11hkR9tuV6aF7sBxg-5azULRoPtjXhMof',
+        'pt.pkl': '1wuXngo6-LuYV6-gNTiMCrilAex1ZwGqW',
+        'books.pkl': '1_c92TarC2FPGl9jZIR81E-N78E1QD1Dl',
+        'similarity_scores.pkl': '1CyhMZAjKHWDjr3BE6JgAjhYX84XzweXL',
+        'df.pkl': '1FI3QCdl43paOGzUIjFodFn5zdRzOT7CU',
+        'anime.pkl': '1KdEkIws74Y0keZgFwQhq4jSRYd1tOjAZ',
+        'similarity_anime.pkl': '1Im4PX3-7-7H2MhryiJc1JV6wPt7SLzvJ',
+        'anime_indices.pkl': '19Zdc2HY-pnFo84LKy8h37zwbOK9_6LDY',
+        'rating.csv': '1Im4PX3-7-7H2MhryiJc1JV6wPt7SLzvJ',  # Use correct file ID for CSV!
+        'games.pkl': '1vr3qOYqW28RsPrqw1wXHVmp2DpWAITSw',
+        'cosine_sim.pkl': '1XlD36Oq7BzNkfBVObQ_QLjb10GslLBQo'
+    }
+    for filename, file_id in files_to_download.items():
+        if not os.path.exists(filename):
+            url = f'https://drive.google.com/uc?id={file_id}'
+            gdown.download(url, filename, quiet=False)
+
+download_models()
+
+
 # Load environment variables
 load_dotenv()
 
