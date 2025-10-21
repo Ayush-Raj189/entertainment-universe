@@ -1,24 +1,33 @@
-\# 🎬 Entertainment Universe 🎮
+<h1 align="center">🌌 Entertainment Universe</h1>
 
+<p align="center">
+🎬 <b>Your AI-powered destination for personalized entertainment recommendations!</b><br>
+Movies, Books, Music, Anime, and Games — all in one stunning Streamlit app built to match your mood and interests.
+</p>
 
+---
 
-A comprehensive entertainment recommendation system built with Streamlit.
+## ✨ Features
 
+| 🎭 Category | 💡 Description |
+|:-----------:|:----------------|
+| 🎬 **Movies** | Intelligent movie matchmaker that finds films you’ll actually enjoy |
+| 📚 **Books** | Explore trending reads and uncover hidden literary gems |
+| 🎵 **Music** | Discover fresh tunes and artists that match your vibe |
+| 🎌 **Anime** | Genre-based anime suggestions tailored just for you |
+| 🎮 **Games** | Find and play top free-to-play titles from across the web |
 
+---
 
-\## ✨ Features
+## 🧠 Tech Stack
 
-
-
-\- 🎬 Movie Recommendations
-
-\- 📚 Book Recommendations  
-
-\- 🎵 Music Recommendations
-
-\- 🎌 Anime Recommendations
-
-\- 🎮 Game Recommendations
+| 🧩 Technology | 🔍 Purpose |
+|---------------|------------|
+| **Streamlit** | Elegant UI and app hosting |
+| **Python 3.9+** | Core programming language |
+| **pandas**, **numpy** | Data handling and processing |
+| **spotipy**, **requests** | API integrations for Spotify & TMDB |
+| **python-dotenv** | Secure environment variable management |
 
 
 
@@ -27,10 +36,9 @@ A comprehensive entertainment recommendation system built with Streamlit.
 
 
 \### 1. Clone the repository
-
 ```bash
 
-git clone https://github.com/YOUR\_USERNAME/entertainment-universe.git
+git clone https://github.com/Ayush-Raj189/entertainment-universe.git
 
 cd entertainment-universe
 
