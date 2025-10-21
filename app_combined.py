@@ -12,6 +12,7 @@ import os
 from dotenv import load_dotenv
 import gdown
 
+
 def download_models():
     files_to_download = {
         'movie_dict.pkl': '1XqtJQcvY8PCV8K3jfEJpsQD03KQIGGs3',
