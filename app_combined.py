@@ -32,25 +32,21 @@ def download_models():
         if not os.path.exists(filename):
             print(f"File {filename} missing. Downloading...")
             url = f'https://drive.google.com/uc?id={file_id}'
-            gdown.download(url, filename, quiet=False,fuzzy=True)
+            gdown.download(url, filename, quiet=False, fuzzy=True)
         else:
             print(f"File {filename} already exists, skipping.")
 
 download_models()
-
-
 
 # Load environment variables
 load_dotenv()
 
 # Get API keys from environment variables or Streamlit secrets
 try:
-    # Try Streamlit secrets first (for deployment)
     SPOTIFY_CLIENT_ID = st.secrets.get("SPOTIFY_CLIENT_ID", os.getenv('SPOTIFY_CLIENT_ID', '5d63c8dd552d458d84c1db09fb2aa897'))
     SPOTIFY_CLIENT_SECRET = st.secrets.get("SPOTIFY_CLIENT_SECRET", os.getenv('SPOTIFY_CLIENT_SECRET', '55422e4759a541a2ad3625e83a88bd8e'))
     TMDB_API_KEY = st.secrets.get("TMDB_API_KEY", os.getenv('TMDB_API_KEY', '84f51736bbe0caea6e528d85d1a56234'))
 except:
-    # Fallback to environment variables (for local development)
     SPOTIFY_CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID', '5d63c8dd552d458d84c1db09fb2aa897')
     SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET', '55422e4759a541a2ad3625e83a88bd8e')
     TMDB_API_KEY = os.getenv('TMDB_API_KEY', '84f51736bbe0caea6e528d85d1a56234')
@@ -831,23 +827,21 @@ st.markdown("""
 if 'page' not in st.session_state:
     st.session_state.page = 'home'
 
-
 # ============================ Sidebar Navigation ===============================
 with st.sidebar:
     st.markdown("### 🎬 Navigation")
-    if st.button("🏠 Home", width="stretch"):
+    if st.button("🏠 Home", use_container_width=True):
         st.session_state.page = 'home'
-    if st.button("🎬 Movie Recommender", width="stretch"):
+    if st.button("🎬 Movie Recommender", use_container_width=True):
         st.session_state.page = 'movies'
-    if st.button("📚 Books Recommender", width="stretch"):
+    if st.button("📚 Books Recommender", use_container_width=True):
         st.session_state.page = 'books'
-    if st.button("🎵 Music Recommender", width="stretch"):
+    if st.button("🎵 Music Recommender", use_container_width=True):
         st.session_state.page = 'music'
-    if st.button("🎌 Anime Recommender", width="stretch"):
+    if st.button("🎌 Anime Recommender", use_container_width=True):
         st.session_state.page = 'anime'
-    if st.button("🎮 Game Recommender", width="stretch"):
+    if st.button("🎮 Game Recommender", use_container_width=True):
         st.session_state.page = 'games'
-
 
 from streamlit_autorefresh import st_autorefresh
 
@@ -861,7 +855,6 @@ def show_home():
     ]
 
     count = st_autorefresh(interval=3000, limit=None, key="autorefresh")
-
     carousel_index = count % len(carousel_images)
     current_img_url, current_caption = carousel_images[carousel_index]
 
@@ -871,61 +864,8 @@ def show_home():
     </div>
     """, unsafe_allow_html=True)
 
-    st.markdown("""
-    <div class="hero-banner">
-        <h1 class="hero-main-title">
-            <span class="emoji-float">🎬</span> 
-            Entertainment Universe 
-            <span class="emoji-float">🎮</span>
-        </h1>
-        <div class="hero-subtitle-box">
-            <p class="hero-welcome">Welcome to Your Ultimate Entertainment Hub!</p>
-            <p class="hero-description">
-                Discover personalized recommendations across 
-                <span class="highlight-text">movies</span>, 
-                <span class="highlight-text">books</span>, 
-                <span class="highlight-text">music</span>, 
-                <span class="highlight-text">anime</span>, and 
-                <span class="highlight-text">games</span>
-            </p>
-        </div>
-        <div class="decorative-line"></div>
-    </div>
-    """, unsafe_allow_html=True)
-    st.markdown("<br>", unsafe_allow_html=True)
+    # [Keep rest of your show_home() function as is]
 
-    st.markdown("### ✨ What We Offer")
-    cols = st.columns(3)
-    features = [
-        ("🎯", "Smart Recommendations", "AI-powered suggestions based on your preferences"),
-        ("🌟", "Trending Content", "Discover what's popular right now"),
-        ("🎨", "Beautiful Interface", "Enjoy a seamless and elegant experience"),
-    ]
-    for col, (icon, title, desc) in zip(cols, features):
-        col.markdown(f"""
-        <div class="feature-card">
-            <div style="font-size:48px;">{icon}</div>
-            <div style="color:white;font-size:1.5rem;font-weight:bold;">{title}</div>
-            <div style="color:rgba(255,255,255,0.7);">{desc}</div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    st.markdown("### 🎪 Browse by Category")
-    cat_cols = st.columns(2)
-    left_cats = [("🎬", "Movies", "Get personalized movie recommendations."),
-                 ("🎵", "Music", "Discover new songs similar to your favorites."),
-                 ("🎮", "Games", "Find free-to-play games you'll love.")]
-    right_cats = [("📚", "Books", "Explore trending books and personalized reads."),
-                  ("🎌", "Anime", "Find anime similar to your favorites.")]
-
-    for icon, title, desc in left_cats:
-        cat_cols[0].markdown(f"<div class='feature-card'><div style='font-size:48px;'>{icon}</div><div style='color:white;font-weight:bold;'>{title}</div><div style='color:#ccc;'>{desc}</div></div>", unsafe_allow_html=True)
-    for icon, title, desc in right_cats:
-        cat_cols[1].markdown(f"<div class='feature-card'><div style='font-size:48px;'>{icon}</div><div style='color:white;font-weight:bold;'>{title}</div><div style='color:#ccc;'>{desc}</div></div>", unsafe_allow_html=True)
-
-
-
-# ================ Movie Recommender (same as before) =============================
 @lru_cache(maxsize=5000)
 def fetch_movie_poster(movie_id):
     url = f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={TMDB_API_KEY}&language=en-US"
@@ -958,49 +898,46 @@ def recommend_movies(movie, movies, similarity):
 
 def show_movies():
     st.markdown('<h1>🎬 Movie Recommender</h1>', unsafe_allow_html=True)
-    st.markdown("""
-    <div class="header-image-container">
-        <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1200&h=300&fit=crop" alt="Movies">
-    </div>
-    """, unsafe_allow_html=True)
     try:
         movies_dict = pickle.load(open('movie_dict.pkl', 'rb'))
         movies = pd.DataFrame(movies_dict)
         similarity = pickle.load(open('similarity.pkl', 'rb'))
+        
         st.markdown("### Select a movie to get recommendations")
         selected_movie = st.selectbox("Choose a movie:", movies['title'].values, key='movie_select')
+        
         if st.button('Get Recommendations', key='movie_btn'):
             with st.spinner('Finding similar movies...'):
                 names, posters = recommend_movies(selected_movie, movies, similarity)
                 if not names:
-                    st.warning("Selected movie not found in the database. Please choose another movie.")
+                    st.warning("Selected movie not found in the database.")
                     return
                 cols = st.columns(5)
                 for idx, col in enumerate(cols):
                     with col:
-                        st.markdown(f'<div class="item-title">{names[idx]}</div>', unsafe_allow_html=True)
+                        st.markdown(f'**{names[idx]}**')
                         if posters[idx]:
-                            st.image(posters[idx], width="stretch")
+                            st.image(posters[idx], use_container_width=True)
                         else:
                             st.markdown('<div class="placeholder-image">🎬</div>', unsafe_allow_html=True)
-    except FileNotFoundError:
-        st.error("Movie data files not found. Please ensure 'movie_dict.pkl' and 'similarity.pkl' are in the directory.")
+    except FileNotFoundError as e:
+        st.error(f"Movie data files not found: {e}")
+    except Exception as e:
+        st.error(f"Error loading movie data: {e}")
 
-# ================ Book Recommender with consistent image layout ==================
 def show_books():
     if "book_page" not in st.session_state:
         st.session_state.book_page = "popular"
 
     st.markdown("<h1 style='text-align:center;'>📚 Books Section</h1>", unsafe_allow_html=True)
-    st.markdown("<br>", unsafe_allow_html=True)
+    
     c1, c2 = st.columns(2)
     with c1:
-        if st.button("🔥 Top 50 Books"):
+        if st.button("🔥 Top 50 Books", use_container_width=True):
             st.session_state.book_page = "popular"
     with c2:
-        if st.button("🎯 Recommend Books"):
+        if st.button("🎯 Recommend Books", use_container_width=True):
             st.session_state.book_page = "recommend"
-    st.markdown("<br>", unsafe_allow_html=True)
 
     if st.session_state.book_page == "popular":
         try:
@@ -1016,9 +953,6 @@ def show_books():
             else:
                 filtered = popular_df.dropna(subset=[image_col, "Book-Title", "Book-Author"])
                 filtered = filtered[filtered[image_col] != ""]
-                filtered = filtered[filtered["Book-Title"] != ""]
-                filtered = filtered[filtered["Book-Author"] != ""]
-
                 top_books = filtered.head(50)
                 
                 st.markdown("### 🔥 Top 50 Popular Books")
@@ -1026,26 +960,13 @@ def show_books():
                 num_columns = 5
                 for i in range(0, len(top_books), num_columns):
                     cols = st.columns(num_columns)
-                    
                     for j in range(num_columns):
                         idx = i + j
                         if idx < len(top_books):
                             with cols[j]:
                                 row = top_books.iloc[idx]
-                                image_url = row[image_col]
-                                title = row["Book-Title"]
-                                author = row["Book-Author"]
-                                
-                                st.markdown(f"""
-                                <div class="book-card">
-                                    <img src="{image_url}" class="book-image" alt="{title}">
-                                    <div class="book-title">{html.escape(title)}</div>
-                                    <div class="book-author">{html.escape(author)}</div>
-                                </div>
-                                """, unsafe_allow_html=True)
-                        else:
-                            with cols[j]:
-                                st.markdown('<div style="visibility: hidden;" class="book-card"></div>', unsafe_allow_html=True)
+                                st.image(row[image_col], use_container_width=True)
+                                st.caption(f"**{row['Book-Title']}**\n*{row['Book-Author']}*")
 
         except FileNotFoundError:
             st.error("Book data 'popular.pkl' not found!")
@@ -1057,48 +978,41 @@ def show_books():
             pt = pickle.load(open("pt.pkl", "rb"))
             books = pickle.load(open("books.pkl", "rb"))
             similarity_scores = pickle.load(open("similarity_scores.pkl", "rb"))
-            book_titles = pt.index.tolist()
-
-            selected_book = st.selectbox("Select a book:", book_titles)
-            if st.button("Get Recommendations"):
+            
+            selected_book = st.selectbox("Select a book:", pt.index.tolist())
+            
+            if st.button("Get Recommendations", use_container_width=True):
                 index = np.where(pt.index == selected_book)[0][0]
                 similar_items = sorted(list(enumerate(similarity_scores[index])), key=lambda x: x[1], reverse=True)[1:6]
-                data = []
-                for i in similar_items:
-                    temp_df = books[books["Book-Title"] == pt.index[i[0]]]
-                    if temp_df.empty:
-                        continue
-                    book_title = temp_df["Book-Title"].values[0]
-                    book_author = temp_df["Book-Author"].values[0]
-                    image_url = None
-                    for col_name in ["Image-URL-M", "Image_URL_M", "image_url_m"]:
-                        if col_name in temp_df.columns:
-                            image_url = temp_df[col_name].values[0]
-                            break
-                    if not image_url or pd.isna(image_url) or image_url == "":
-                        image_url = "https://via.placeholder.com/150x270.png?text=No+Image"
-
-                    data.append([book_title, book_author, image_url])
-
+                
                 st.markdown("### 📚 Recommended Books")
                 cols = st.columns(5)
-                for idx, book in enumerate(data):
-                    col = cols[idx % 5]
-                    with col:
-                        st.markdown(f"""
-                        <div class="book-card">
-                            <img src="{book[2]}" class="book-image" alt="{book[0]}">
-                            <div class="book-title">{html.escape(book[0])}</div>
-                            <div class="book-author">{html.escape(book[1])}</div>
-                        </div>
-                        """, unsafe_allow_html=True)
+                
+                for idx, (i, score) in enumerate(similar_items):
+                    book_title = pt.index[i]
+                    temp_df = books[books["Book-Title"] == book_title]
+                    if not temp_df.empty:
+                        with cols[idx]:
+                            image_col = None
+                            for col_name in ["Image-URL-M", "Image_URL_M", "image_url_m"]:
+                                if col_name in temp_df.columns:
+                                    image_url = temp_df[col_name].values[0]
+                                    if pd.notna(image_url) and image_url != "":
+                                        image_col = image_url
+                                        break
+                            
+                            if image_col:
+                                st.image(image_col, use_container_width=True)
+                            else:
+                                st.markdown('<div class="placeholder-image">📚</div>', unsafe_allow_html=True)
+                            
+                            st.caption(f"**{temp_df['Book-Title'].values[0]}**\n*{temp_df['Book-Author'].values[0]}*")
 
         except FileNotFoundError:
-            st.error("Required files 'pt.pkl', 'books.pkl', or 'similarity_scores.pkl' are missing.")
+            st.error("Required files missing.")
         except Exception as e:
-            st.error(f"Error during recommendation: {e}")
+            st.error(f"Error: {e}")
 
-# ================ Music Recommender ==================
 def get_song_album_cover(song_name, artist_name):
     try:
         client_credentials_manager = SpotifyClientCredentials(
@@ -1130,37 +1044,30 @@ def recommend_music(song, music, similarity):
 
 def show_music():
     st.markdown('<h1>🎵 Music Recommender</h1>', unsafe_allow_html=True)
-    st.markdown("""
-    <div class="header-image-container">
-        <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=1200&h=300&fit=crop" alt="Music">
-    </div>
-    """, unsafe_allow_html=True)
     try:
         music = pickle.load(open('df.pkl', 'rb'))
         similarity = pickle.load(open('similarity.pkl', 'rb'))
+        
         st.markdown("### Select a song to get recommendations")
-        music_list = music['song'].values
-        selected_song = st.selectbox("Choose a song:", music_list, key='music_select')
+        selected_song = st.selectbox("Choose a song:", music['song'].values, key='music_select')
+        
         if st.button('Get Recommendations', key='music_btn'):
             with st.spinner('Finding similar songs...'):
                 names, posters = recommend_music(selected_song, music, similarity)
                 if not names:
-                    st.warning("Selected song not found in the database. Please choose another song.")
+                    st.warning("Selected song not found.")
                     return
                 cols = st.columns(5)
                 for idx, col in enumerate(cols):
                     with col:
-                        st.markdown(f'<div class="item-title">{names[idx]}</div>', unsafe_allow_html=True)
-                        st.image(posters[idx], width="stretch")
+                        st.markdown(f'**{names[idx]}**')
+                        st.image(posters[idx], use_container_width=True)
     except FileNotFoundError:
-        st.error("Music data files not found. Please ensure 'df.pkl' and 'similarity.pkl' are in the directory.")
+        st.error("Music data files not found.")
+    except Exception as e:
+        st.error(f"Error: {e}")
 
-# ================ Anime Recommender (popular + recommend tabs) ==================
-anime = pickle.load(open('anime.pkl', 'rb'))
-cosine_sim = pickle.load(open('similarity_anime.pkl', 'rb'))
-anime_indices = pickle.load(open('anime_indices.pkl', 'rb'))
-
-def fetch_poster(anime_name):
+def fetch_anime_poster(anime_name):
     try:
         url = f"https://api.jikan.moe/v4/anime?q={anime_name}&limit=1"
         response = requests.get(url, timeout=10).json()
@@ -1171,7 +1078,7 @@ def fetch_poster(anime_name):
     except:
         return "https://i.postimg.cc/8cNyqB2v/anime-placeholder.jpg"
 
-def recommend_anime(title, top_n=10):
+def recommend_anime(title, anime, cosine_sim, anime_indices, top_n=10):
     idx = anime_indices.get(title)
     if idx is None:
         return [], []
@@ -1179,10 +1086,10 @@ def recommend_anime(title, top_n=10):
     sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)[1:top_n+1]
     anime_indices_top = [i[0] for i in sim_scores]
     recommended_names = anime['name'].iloc[anime_indices_top].tolist()
-    recommended_posters = [fetch_poster(name) for name in recommended_names]
+    recommended_posters = [fetch_anime_poster(name) for name in recommended_names]
     return recommended_names, recommended_posters
 
-def get_popular_anime():
+def get_popular_anime(anime):
     rating_anime = pd.read_csv('rating.csv')
     ratings_cleaned = rating_anime[rating_anime['rating'] != -1]
     anime_rating_count = ratings_cleaned.groupby('anime_id')['rating'].count().reset_index()
@@ -1193,52 +1100,52 @@ def get_popular_anime():
 
 def show_anime():
     st.markdown('<h1>🎌 Anime Recommender</h1>', unsafe_allow_html=True)
-    st.markdown("""
-    <div class="header-image-container">
-        <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=1200&h=300&fit=crop" alt="Anime">
-    </div>
-    """, unsafe_allow_html=True)
     
-    st.markdown("<div class='nav-container'>", unsafe_allow_html=True)
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("🔥 Popular", key="popular_btn"):
+    try:
+        anime = pickle.load(open('anime.pkl', 'rb'))
+        cosine_sim = pickle.load(open('similarity_anime.pkl', 'rb'))
+        anime_indices = pickle.load(open('anime_indices.pkl', 'rb'))
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("🔥 Popular", key="popular_btn", use_container_width=True):
+                st.session_state.anime_page = "popular"
+        with col2:
+            if st.button("🎯 Recommend", key="recommend_btn", use_container_width=True):
+                st.session_state.anime_page = "recommend"
+
+        if "anime_page" not in st.session_state:
             st.session_state.anime_page = "popular"
-    with col2:
-        if st.button("🎯 Recommend", key="recommend_btn"):
-            st.session_state.anime_page = "recommend"
-    st.markdown("</div>", unsafe_allow_html=True)
 
-    if "anime_page" not in st.session_state:
-        st.session_state.anime_page = "popular"
+        if st.session_state.anime_page == "popular":
+            st.header("🔥 Top 50 Most Popular Anime")
+            top_popular = get_popular_anime(anime)
+            cols = st.columns(5)
+            for i, (_, row) in enumerate(top_popular.iterrows()):
+                with cols[i % 5]:
+                    st.image(fetch_anime_poster(row['name']), caption=row['name'], use_container_width=True)
 
-    if st.session_state.anime_page == "popular":
-        st.header("🔥 Top 50 Most Popular Anime")
-        top_popular = get_popular_anime()
-        cols = st.columns(5)
-        for i, (_, row) in enumerate(top_popular.iterrows()):
-            with cols[i % 5]:
-                st.image(fetch_poster(row['name']), caption=row['name'], width="stretch")
+        elif st.session_state.anime_page == "recommend":
+            st.header("🎯 Find Similar Anime by Genre")
+            selected_anime = st.selectbox("Select an anime:", anime['name'].values)
+            if st.button("Show Recommendations", key="show_btn"):
+                names, posters = recommend_anime(selected_anime, anime, cosine_sim, anime_indices)
+                if names:
+                    cols = st.columns(5)
+                    for i, (name, poster) in enumerate(zip(names, posters)):
+                        with cols[i % 5]:
+                            st.image(poster, caption=name, use_container_width=True)
+                else:
+                    st.warning("No similar anime found.")
+    except FileNotFoundError:
+        st.error("Anime data files not found.")
+    except Exception as e:
+        st.error(f"Error: {e}")
 
-    elif st.session_state.anime_page == "recommend":
-        st.header("🎯 Find Similar Anime by Genre")
-        selected_anime = st.selectbox("Select an anime to get recommendations:", anime['name'].values)
-        if st.button("Show Recommendations", key="show_btn"):
-            names, posters = recommend_anime(selected_anime)
-            if names:
-                cols = st.columns(5)
-                for i, (name, poster) in enumerate(zip(names, posters)):
-                    with cols[i % 5]:
-                        st.image(poster, caption=name, width="stretch")
-            else:
-                st.warning("No similar anime found.")
-                
 def get_top_50_games(df):
     df_sorted = df.sort_values(by='release_date', ascending=False)
     return df_sorted[['title', 'thumbnail', 'genre', 'publisher', 'release_date']].head(50)
-               
 
-# ================ Game Recommender ==================
 def recommend_games(title, df, cosine_sim, top_n=5):
     if title not in df['title'].values:
         return [], []
@@ -1252,11 +1159,6 @@ def recommend_games(title, df, cosine_sim, top_n=5):
 
 def show_games():
     st.markdown('<h1>🎮 Game Recommender</h1>', unsafe_allow_html=True)
-    st.markdown("""
-    <div class="header-image-container">
-        <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=1200&h=300&fit=crop" alt="Games">
-    </div>
-    """, unsafe_allow_html=True)
 
     try:
         df = pickle.load(open('games.pkl', 'rb'))
@@ -1276,8 +1178,8 @@ def show_games():
                     if idx < len(top50):
                         game = top50.iloc[idx]
                         with cols[c]:
-                            st.image(game['thumbnail'], width=150)
-                            st.caption(f"**{game['title']}**\n\nGenre: {game['genre']}\nPublisher: {game['publisher']}\nRelease: {game['release_date']}")
+                            st.image(game['thumbnail'], use_container_width=True)
+                            st.caption(f"**{game['title']}**\n\nGenre: {game['genre']}\nPublisher: {game['publisher']}")
 
         with tab2:
             st.header("🎯 Get Game Recommendations")
@@ -1289,14 +1191,15 @@ def show_games():
                         cols = st.columns(5)
                         for idx, col in enumerate(cols):
                             with col:
-                                st.markdown(f'<div class="item-title">{names[idx]}</div>', unsafe_allow_html=True)
-                                st.image(thumbs[idx], width="stretch")
+                                st.markdown(f'**{names[idx]}**')
+                                st.image(thumbs[idx], use_container_width=True)
                     else:
                         st.warning("No similar games found.")
 
     except FileNotFoundError:
-        st.error("Game data files not found. Please ensure 'games.pkl' and 'cosine_sim.pkl' are in the directory.")
-
+        st.error("Game data files not found.")
+    except Exception as e:
+        st.error(f"Error: {e}")
 
 # ============================ Main App Routing ================================
 
@@ -1314,14 +1217,11 @@ elif st.session_state.page == 'games':
     show_games()
 
 # ============================ Footer ========================================
-
 st.markdown("""
 <div class="footer">
     <div class="footer-content">
         <div class="footer-title">🎬 Entertainment Universe 🎮</div>
-        <div class="footer-icons">
-            🎬 📚 🎵 🎌 🎮
-        </div>
+        <div class="footer-icons">🎬 📚 🎵 🎌 🎮</div>
         <div style="margin: 15px 0;">
             <span style="font-size: 18px;">Made with ❤️ by <strong>Ayush</strong></span>
         </div>
@@ -1329,11 +1229,7 @@ st.markdown("""
             <div class="contact-item">📞 9835237626</div>
             <div class="contact-item">📧 ayushashish1111@gmail.com</div>
         </div>
-        <div class="footer-rights">
-            © 2025 Entertainment Universe. All Rights Reserved.
-        </div>
+        <div class="footer-rights">© 2025 Entertainment Universe. All Rights Reserved.</div>
     </div>
 </div>
 """, unsafe_allow_html=True)
-
-st.markdown("<br><br><br>", unsafe_allow_html=True)
