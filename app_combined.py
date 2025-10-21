@@ -864,7 +864,24 @@ def show_home():
     </div>
     """, unsafe_allow_html=True)
 
-    # [Keep rest of your show_home() function as is]
+   def show_home():
+    carousel_images = [
+        ("https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1200&h=400&fit=crop", "🎬 Movies"),
+        ("https://images.unsplash.com/photo-1524578271613-d550eacf6090?w=1200&h=400&fit=crop", "📚 Books"),
+        ("https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=1200&h=400&fit=crop", "🎵 Music"),
+        ("https://images.unsplash.com/photo-1578632767115-351597cf2477?w=1200&h=400&fit=crop", "🎌 Anime"),
+        ("https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=1200&h=400&fit=crop", "🎮 Games"),
+    ]
+
+    count = st_autorefresh(interval=3000, limit=None, key="autorefresh")
+    carousel_index = count % len(carousel_images)
+    current_img_url, current_caption = carousel_images[carousel_index]
+
+    st.markdown(f"""
+    <div class="header-image-container">
+        <img src="{current_img_url}" alt="{current_caption}">
+    </div>
+    """, unsafe_allow_html=True)
 
 @lru_cache(maxsize=5000)
 def fetch_movie_poster(movie_id):
