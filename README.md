@@ -1,21 +1,33 @@
-🎬 Entertainment Universe 🎮
-Your AI-powered destination for personalized recommendations in movies, books, music, anime, and games — all in a stunning one-stop Streamlit app!
+<h1 align="center">🌌 Entertainment Universe</h1>
 
+<p align="center">
+🎬 <b>Your AI-powered destination for personalized entertainment recommendations!</b><br>
+Movies, Books, Music, Anime, and Games — all in one stunning Streamlit app built to match your mood and interests.
+</p>
 
+---
 
-✨ Features
-🎬 Movies   Intelligent movie matchmaker
-📚 Books    Trending reads & hidden gems
-🎵 Music    Discover new favorites
-🎌 Anime     Genre-based recommendations
-🎮 Games     Play top free-to-play titles
+## ✨ Features
 
-Tech Stack
-Streamlit     — UI & app hosting
-Python 3.9+    — Core language
-pandas, numpy   — Data handling
-spotipy, requests — External APIs
-python-dotenv   — Secure secrets
+| 🎭 Category | 💡 Description |
+|:-----------:|:----------------|
+| 🎬 **Movies** | Intelligent movie matchmaker that finds films you’ll actually enjoy |
+| 📚 **Books** | Explore trending reads and uncover hidden literary gems |
+| 🎵 **Music** | Discover fresh tunes and artists that match your vibe |
+| 🎌 **Anime** | Genre-based anime suggestions tailored just for you |
+| 🎮 **Games** | Find and play top free-to-play titles from across the web |
+
+---
+
+## 🧠 Tech Stack
+
+| 🧩 Technology | 🔍 Purpose |
+|---------------|------------|
+| **Streamlit** | Elegant UI and app hosting |
+| **Python 3.9+** | Core programming language |
+| **pandas**, **numpy** | Data handling and processing |
+| **spotipy**, **requests** | API integrations for Spotify & TMDB |
+| **python-dotenv** | Secure environment variable management |
 
 
 
