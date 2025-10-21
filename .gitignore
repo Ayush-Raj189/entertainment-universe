@@ -1,0 +1,76 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Streamlit
+.streamlit/
+
+# Large Model Files - EXCLUDE FROM GIT
+*.pkl
+*.pickle
+*.csv
+*.h5
+*.hdf5
+*.npy
+*.npz
+*.joblib
+
+# API Keys & Environment Variables
+.env
+.env.local
+config.py
+secrets.toml
+
+# Logs
+*.log
+logs/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb
+
+# Data files
+data/
+datasets/
+*.parquet
+*.feather
+
+# Temporary files
+tmp/
+temp/
