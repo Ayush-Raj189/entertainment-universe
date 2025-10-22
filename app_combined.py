@@ -14,20 +14,20 @@ import gdown
 
 def download_models():
     files_to_download = {
-        'movie_dict.pkl': '1XqtJQcvY8PCV8K3jfEJpsQD03KQIGGs3',
-        'similarity_movies.pkl': '1MdZuCyhRSoMv49rW3BZZY8YDBvPEzEa5',
-        'similarity_songs.pkl': '1_FPQEQ43_JXMKiNwHSkZQC7MTHSiyqRD',
-        'popular.pkl': '11hkR9tuV6aF7sBxg-5azULRoPtjXhMof',
-        'pt.pkl': '1wuXngo6-LuYV6-gNTiMCrilAex1ZwGqW',
-        'books.pkl': '1_c92TarC2FPGl9jZIR81E-N78E1QD1Dl',
-        'similarity_scores.pkl': '1CyhMZAjKHWDjr3BE6JgAjhYX84XzweXL',
-        'df.pkl': '1hSoeJtA49ZYMAqIC188LBllzrt3MevtQ',
-        'anime.pkl': '1KdEkIws74Y0keZgFwQhq4jSRYd1tOjAZ',
-        'similarity_anime.pkl': '1Im4PX3-7-7H2MhryiJc1JV6wPt7SLzvJ',
-        'anime_indices.pkl': '19Zdc2HY-pnFo84LKy8h37zwbOK9_6LDY',
-        'rating.csv': '1umrFSHn3ynilNoYJIXddJo89UcwkhTZC', 
-        'games.pkl': '1vr3qOYqW28RsPrqw1wXHVmp2DpWAITSw',
-        'cosine_sim.pkl': '1XlD36Oq7BzNkfBVObQ_QLjb10GslLBQo'
+        'movie_dict.pkl': '11RvGNvRH-2smDTLrdJ2ZcOLPHquvRTRq',
+        'similarity_movies.pkl': '1IoPdFVTqj5NwBpW1jQyArQ670UjU1Lss',
+        'similarity_songs.pkl': '1gjHEUt7hl4VNN4gzQKGzX2-LQtf52PT4',
+        'popular.pkl': '1uLOJUn5sD1-Bnm_vDsONESsvImzBCAsG',
+        'pt.pkl': '1bUSMUwKhHZS4CN9KTX-XbFq8iT9TPvQs',
+        'books.pkl': '1kNQJKArgKIpz7NmznYARuqSG-N0PR3jp',
+        'similarity_scores.pkl': '1W6FN-BIDd7kSSqLWaZOHgfMnUobBtqMv',
+        'df.pkl': '18Wv2fsQIAZjaYtoOJVS5WgpbccoVifVS',
+        'anime.pkl': '1MURQo1nQurTAMCPmPURluK6NbDvdnWJR',
+        'similarity_anime.pkl': '1GsrqNetSz8sW2G-NK01jiXDIkWgmptcc',
+        'anime_indices.pkl': '1Dwj3Vlsx-FuB5ghChtycaCH16T2nEYvA',
+        'rating.csv': '1r5efPywImnecYDQaA0hnygqc_ID6BpDW', 
+        'games.pkl': '1XiOSLzOx3HDcT8kwZZqgeh02DowbLbYG',
+        'cosine_sim.pkl': '1305Z_qsv8rjdb_7MxH9rh-4AkizQOycq'
     }
     for filename, file_id in files_to_download.items():
         if not os.path.exists(filename):
