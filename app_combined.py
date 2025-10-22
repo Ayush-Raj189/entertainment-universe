@@ -856,25 +856,25 @@ if 'page' not in st.session_state:
 # ============================ Sidebar Navigation ===============================
 with st.sidebar:
     st.markdown("### 🎬 Navigation")
-    if st.button("🏠 Home", use_container_width=True):
+    if st.button("🏠 Home", width="stretch"):
         st.session_state.page = 'home'
-    if st.button("🎬 Movie Recommender", use_container_width=True):
+    if st.button("🎬 Movie Recommender", width="stretch"):
         st.session_state.page = 'movies'
-    if st.button("📚 Books Recommender", use_container_width=True):
+    if st.button("📚 Books Recommender", width="stretch"):
         st.session_state.page = 'books'
-    if st.button("🎌 Anime Recommender", use_container_width=True):
+    if st.button("🎌 Anime Recommender", width="stretch"):
         st.session_state.page = 'anime'
-    if st.button("🎮 Game Recommender", use_container_width=True):
+    if st.button("🎮 Game Recommender", width="stretch"):
         st.session_state.page = 'games'
 
 from streamlit_autorefresh import st_autorefresh
 
 def show_home():
     carousel_images = [
-        ("https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=1200&h=400&fit=crop", "🎬 Movies"),
+        ("https://img.freepik.com/premium-vector/movie-theater-signboard-blue_34230-295.jpg", "🎬 Movies"),
         ("https://images.unsplash.com/photo-1524578271613-d550eacf6090?w=1200&h=400&fit=crop", "📚 Books"),
         ("https://images.unsplash.com/photo-1578632767115-351597cf2477?w=1200&h=400&fit=crop", "🎌 Anime"),
-        ("https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=1200&h=400&fit=crop", "🎮 Games"),
+        ("https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=1200&h=400&fit=crop", "🎮 Games"),
     ]
 
     count = st_autorefresh(interval=10000, limit=None, key="autorefresh")
@@ -979,7 +979,7 @@ def show_movies():
     st.markdown('<h1>🎬 Movie Recommender</h1>', unsafe_allow_html=True)
     st.markdown("""
     <div class="header-image-container">
-        <img src="https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=1200&h=300&fit=crop" alt="Movies">
+        <img src="https://img.freepik.com/premium-vector/movie-theater-signboard-blue_34230-295.jpg" alt="Movies">
     </div>
     """, unsafe_allow_html=True)
     try:
@@ -997,7 +997,7 @@ def show_movies():
                     with col:
                         st.markdown(f'**{names[idx]}**')
                         if posters[idx]:
-                            st.image(posters[idx], use_container_width=True)
+                            st.image(posters[idx], width="stretch")
                         else:
                             st.markdown('<div class="placeholder-image">🎬</div>', unsafe_allow_html=True)
     except FileNotFoundError:
@@ -1018,10 +1018,10 @@ def show_books():
     st.markdown("<br>", unsafe_allow_html=True)
     c1, c2 = st.columns(2)
     with c1:
-        if st.button("🔥 Top 50 Books", use_container_width=True):
+        if st.button("🔥 Top 50 Books", width="stretch"):
             st.session_state.book_page = "popular"
     with c2:
-        if st.button("🎯 Recommend Books", use_container_width=True):
+        if st.button("🎯 Recommend Books", width="stretch"):
             st.session_state.book_page = "recommend"
     st.markdown("<br>", unsafe_allow_html=True)
 
@@ -1080,7 +1080,7 @@ def show_books():
             book_titles = pt.index.tolist()
 
             selected_book = st.selectbox("Select a book:", book_titles)
-            if st.button("Get Recommendations", use_container_width=True):
+            if st.button("Get Recommendations", width="stretch"):
                 index = np.where(pt.index == selected_book)[0][0]
                 similar_items = sorted(list(enumerate(similarity_scores[index])), key=lambda x: x[1], reverse=True)[1:6]
                 data = []
@@ -1165,10 +1165,10 @@ def show_anime():
         st.markdown("<div class='nav-container'>", unsafe_allow_html=True)
         col1, col2 = st.columns(2)
         with col1:
-            if st.button("🔥 Popular", key="popular_btn", use_container_width=True):
+            if st.button("🔥 Popular", key="popular_btn", width="stretch"):
                 st.session_state.anime_page = "popular"
         with col2:
-            if st.button("🎯 Recommend", key="recommend_btn", use_container_width=True):
+            if st.button("🎯 Recommend", key="recommend_btn", width="stretch"):
                 st.session_state.anime_page = "recommend"
         st.markdown("</div>", unsafe_allow_html=True)
 
@@ -1242,7 +1242,7 @@ def show_games():
     st.markdown('<h1>🎮 Game Recommender</h1>', unsafe_allow_html=True)
     st.markdown("""
     <div class="header-image-container">
-        <img src="https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=1200&h=300&fit=crop" alt="Games">
+        <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=1200&h=300&fit=crop" alt="Games">
     </div>
     """, unsafe_allow_html=True)
 
@@ -1264,7 +1264,7 @@ def show_games():
                     if idx < len(top50):
                         game = top50.iloc[idx]
                         with cols[c]:
-                            st.image(game['thumbnail'], use_container_width=True)
+                            st.image(game['thumbnail'], width="stretch")
                             st.caption(f"**{game['title']}**\n\nGenre: {game['genre']}\nPublisher: {game['publisher']}\nRelease: {game['release_date']}")
 
         with tab2:
@@ -1278,7 +1278,7 @@ def show_games():
                         for idx, col in enumerate(cols):
                             with col:
                                 st.markdown(f'**{names[idx]}**')
-                                st.image(thumbs[idx], use_container_width=True)
+                                st.image(thumbs[idx], width="stretch")
                     else:
                         st.warning("No similar games found.")
 
