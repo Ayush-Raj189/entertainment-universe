@@ -2,7 +2,7 @@
 
 <p align="center">
 🎬 <b>Your AI-powered destination for personalized entertainment recommendations!</b><br>
-Movies, Books, Music, Anime, and Games — all in one stunning Streamlit app built to match your mood and interests.
+Movies, Books,Anime, and Games — all in one stunning Streamlit app built to match your mood and interests.
 </p>
 
 ---
@@ -13,7 +13,6 @@ Movies, Books, Music, Anime, and Games — all in one stunning Streamlit app bui
 |:-----------:|:----------------|
 | 🎬 **Movies** | Intelligent movie matchmaker that finds films you’ll actually enjoy |
 | 📚 **Books** | Explore trending reads and uncover hidden literary gems |
-| 🎵 **Music** | Discover fresh tunes and artists that match your vibe |
 | 🎌 **Anime** | Genre-based anime suggestions tailored just for you |
 | 🎮 **Games** | Find and play top free-to-play titles from across the web |
 
@@ -70,7 +69,7 @@ Required files:
 
 \- movie\_dict.pkl
 
-\- similarity.pkl
+\- similarity_movies.pkl
 
 \- popular.pkl
 
@@ -104,7 +103,6 @@ Place all `.pkl` and `.csv` files in the project root directory.
 
 Create a `.env` file:
 Get API keys from:
-- [Spotify Developer](https://developer.spotify.com/)
 - [TMDB](https://www.themoviedb.org/settings/api)
 
 ## 🎯 Usage
