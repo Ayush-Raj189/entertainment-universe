@@ -822,8 +822,46 @@ st.markdown("""
     }
     
     .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);    
     }
+    
+    .anime-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: 15px;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    }
+
+    .anime-card:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+    }
+
+    .anime-poster {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .anime-title {
+    color: white;
+    font-weight: bold;
+    margin-top: 10px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    line-height: 1.3;
+     }
 </style>
 """, unsafe_allow_html=True)
 
@@ -1216,10 +1254,37 @@ def show_anime():
     if st.session_state.anime_page == "popular":
         st.header("🔥 Top 50 Most Popular Anime")
         top_popular = get_popular_anime()
-        cols = st.columns(5)
-        for i, (_, row) in enumerate(top_popular.iterrows()):
-            with cols[i % 5]:
-                st.image(fetch_poster(row['name']), caption=row['name'], width="stretch")
+        
+        # Display in rows of 5
+        for i in range(0, len(top_popular), 5):
+            cols = st.columns(5)
+            for j in range(5):
+                idx = i + j
+                if idx < len(top_popular):
+                    with cols[j]:
+                        row = top_popular.iloc[idx]
+                        poster_url = fetch_poster(row['name'])
+                        
+                        if poster_url:
+                            st.markdown(f"""
+                            <div style="text-align: center;">
+                                <img src="{poster_url}" style="width: 100%; height: 300px; object-fit: cover; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+                                <div style="color: white; margin-top: 10px; font-weight: bold; height: 60px; display: flex; align-items: center; justify-content: center;">
+                                    {html.escape(row['name'])}
+                                </div>
+                            </div>
+                            """, unsafe_allow_html=True)
+                        else:
+                            st.markdown(f"""
+                            <div style="text-align: center;">
+                                <div class="placeholder-image" style="width: 100%; height: 300px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; color: white; font-size: 48px;">
+                                    🎌
+                                </div>
+                                <div style="color: white; margin-top: 10px; font-weight: bold; height: 60px; display: flex; align-items: center; justify-content: center;">
+                                    {html.escape(row['name'])}
+                                </div>
+                            </div>
+                            """, unsafe_allow_html=True)
 
     elif st.session_state.anime_page == "recommend":
         st.header("🎯 Find Similar Anime by Genre")
@@ -1227,10 +1292,36 @@ def show_anime():
         if st.button("Show Recommendations", key="show_btn"):
             names, posters = recommend_anime(selected_anime)
             if names:
-                cols = st.columns(5)
-                for i, (name, poster) in enumerate(zip(names, posters)):
-                    with cols[i % 5]:
-                        st.image(poster, caption=name, width="stretch")
+                # Display in rows of 5
+                for i in range(0, len(names), 5):
+                    cols = st.columns(5)
+                    for j in range(5):
+                        idx = i + j
+                        if idx < len(names):
+                            with cols[j]:
+                                poster_url = posters[idx]
+                                anime_name = names[idx]
+                                
+                                if poster_url:
+                                    st.markdown(f"""
+                                    <div style="text-align: center;">
+                                        <img src="{poster_url}" style="width: 100%; height: 300px; object-fit: cover; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+                                        <div style="color: white; margin-top: 10px; font-weight: bold; height: 60px; display: flex; align-items: center; justify-content: center;">
+                                            {html.escape(anime_name)}
+                                        </div>
+                                    </div>
+                                    """, unsafe_allow_html=True)
+                                else:
+                                    st.markdown(f"""
+                                    <div style="text-align: center;">
+                                        <div class="placeholder-image" style="width: 100%; height: 300px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; color: white; font-size: 48px;">
+                                            🎌
+                                        </div>
+                                        <div style="color: white; margin-top: 10px; font-weight: bold; height: 60px; display: flex; align-items: center; justify-content: center;">
+                                            {html.escape(anime_name)}
+                                        </div>
+                                    </div>
+                                    """, unsafe_allow_html=True)
             else:
                 st.warning("No similar anime found.")
                 
