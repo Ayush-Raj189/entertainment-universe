@@ -15,12 +15,13 @@ import gdown
 def download_models():
     files_to_download = {
         'movie_dict.pkl': '1XqtJQcvY8PCV8K3jfEJpsQD03KQIGGs3',
-        'similarity.pkl': '1FycweAkXpOthRgAH5Ll6N8Oj5EuRquxS',
+        'similarity_movies.pkl': '1MdZuCyhRSoMv49rW3BZZY8YDBvPEzEa5',
+        'similarity_songs.pkl': '1_FPQEQ43_JXMKiNwHSkZQC7MTHSiyqRD',
         'popular.pkl': '11hkR9tuV6aF7sBxg-5azULRoPtjXhMof',
         'pt.pkl': '1wuXngo6-LuYV6-gNTiMCrilAex1ZwGqW',
         'books.pkl': '1_c92TarC2FPGl9jZIR81E-N78E1QD1Dl',
         'similarity_scores.pkl': '1CyhMZAjKHWDjr3BE6JgAjhYX84XzweXL',
-        'df.pkl': '1FI3QCdl43paOGzUIjFodFn5zdRzOT7CU',
+        'df.pkl': '1hSoeJtA49ZYMAqIC188LBllzrt3MevtQ',
         'anime.pkl': '1KdEkIws74Y0keZgFwQhq4jSRYd1tOjAZ',
         'similarity_anime.pkl': '1Im4PX3-7-7H2MhryiJc1JV6wPt7SLzvJ',
         'anime_indices.pkl': '19Zdc2HY-pnFo84LKy8h37zwbOK9_6LDY',
@@ -966,7 +967,7 @@ def show_movies():
     try:
         movies_dict = pickle.load(open('movie_dict.pkl', 'rb'))
         movies = pd.DataFrame(movies_dict)
-        similarity = pickle.load(open('similarity.pkl', 'rb'))
+        similarity = pickle.load(open('similarity_movies.pkl', 'rb'))
         st.markdown("### Select a movie to get recommendations")
         selected_movie = st.selectbox("Choose a movie:", movies['title'].values, key='movie_select')
         if st.button('Get Recommendations', key='movie_btn'):
@@ -984,7 +985,7 @@ def show_movies():
                         else:
                             st.markdown('<div class="placeholder-image">🎬</div>', unsafe_allow_html=True)
     except FileNotFoundError:
-        st.error("Movie data files not found. Please ensure 'movie_dict.pkl' and 'similarity.pkl' are in the directory.")
+        st.error("Movie data files not found. Please ensure 'movie_dict.pkl' and 'similarity_movies.pkl' are in the directory.")
 
 # ================ Book Recommender with consistent image layout ==================
 def show_books():
@@ -1137,7 +1138,7 @@ def show_music():
     """, unsafe_allow_html=True)
     try:
         music = pickle.load(open('df.pkl', 'rb'))
-        similarity = pickle.load(open('similarity.pkl', 'rb'))
+        similarity = pickle.load(open('similarity_songs.pkl', 'rb'))
         st.markdown("### Select a song to get recommendations")
         music_list = music['song'].values
         selected_song = st.selectbox("Choose a song:", music_list, key='music_select')
@@ -1153,7 +1154,7 @@ def show_music():
                         st.markdown(f'<div class="item-title">{names[idx]}</div>', unsafe_allow_html=True)
                         st.image(posters[idx], width="stretch")
     except FileNotFoundError:
-        st.error("Music data files not found. Please ensure 'df.pkl' and 'similarity.pkl' are in the directory.")
+        st.error("Music data files not found. Please ensure 'df.pkl' and 'similarity_songs.pkl' are in the directory.")
 
 # ================ Anime Recommender (popular + recommend tabs) ==================
 anime = pickle.load(open('anime.pkl', 'rb'))
