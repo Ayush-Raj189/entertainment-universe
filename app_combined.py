@@ -30,7 +30,7 @@ def download_models():
         'cosine_sim.pkl': '1305Z_qsv8rjdb_7MxH9rh-4AkizQOycq'
     }
  
-      failed_files = []
+    failed_files = []
     for filename, file_id in files_to_download.items():
         if not os.path.exists(filename):
             print(f"File {filename} missing. Downloading...")
