@@ -861,7 +861,7 @@ def show_home():
         ("https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=1200&h=400&fit=crop", "🎮 Games"),
     ]
 
-    count = st_autorefresh(interval=3000, limit=None, key="autorefresh")
+    count = st_autorefresh(interval=10000, limit=None, key="autorefresh")
 
     carousel_index = count % len(carousel_images)
     current_img_url, current_caption = carousel_images[carousel_index]
