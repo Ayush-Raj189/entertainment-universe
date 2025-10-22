@@ -17,7 +17,7 @@ def download_models():
         'movie_dict.pkl': '11RvGNvRH-2smDTLrdJ2ZcOLPHquvRTRq',
         'similarity_movies.pkl': '1IoPdFVTqj5NwBpW1jQyArQ670UjU1Lss',
         'similarity_songs.pkl': '1gjHEUt7hl4VNN4gzQKGzX2-LQtf52PT4',
-        'popular.pkl': '1WpWPollZN9En8kKiJp3O2DTbUpXv7zhD',
+        'popular.pkl': '1uLOJUn5sD1-Bnm_vDsONESsvImzBCAsG',
         'pt.pkl': '1bUSMUwKhHZS4CN9KTX-XbFq8iT9TPvQs',
         'books.pkl': '1kNQJKArgKIpz7NmznYARuqSG-N0PR3jp',
         'similarity_scores.pkl': '1W6FN-BIDd7kSSqLWaZOHgfMnUobBtqMv',
@@ -29,7 +29,6 @@ def download_models():
         'games.pkl': '1XiOSLzOx3HDcT8kwZZqgeh02DowbLbYG',
         'cosine_sim.pkl': '1305Z_qsv8rjdb_7MxH9rh-4AkizQOycq'
     }
- 
     failed_files = []
     for filename, file_id in files_to_download.items():
         if not os.path.exists(filename):
@@ -940,6 +939,14 @@ def recommend_movies(movie, movies, similarity):
         recommended_posters.append(poster_url)
     return recommended_movies, recommended_posters
 
+@st.cache_resource
+def load_movie_data():
+    """Load movie data with caching"""
+    movies_dict = pickle.load(open('movie_dict.pkl', 'rb'))
+    movies = pd.DataFrame(movies_dict)
+    similarity = pickle.load(open('similarity_movies.pkl', 'rb'))
+    return movies, similarity
+
 def show_movies():
     st.markdown('<h1>🎬 Movie Recommender</h1>', unsafe_allow_html=True)
     st.markdown("""
@@ -948,9 +955,7 @@ def show_movies():
     </div>
     """, unsafe_allow_html=True)
     try:
-        movies_dict = pickle.load(open('movie_dict.pkl', 'rb'))
-        movies = pd.DataFrame(movies_dict)
-        similarity = pickle.load(open('similarity_movies.pkl', 'rb'))
+        movies, similarity = load_movie_data()
         st.markdown("### Select a movie to get recommendations")
         selected_movie = st.selectbox("Choose a movie:", movies['title'].values, key='movie_select')
         if st.button('Get Recommendations', key='movie_btn'):
@@ -1109,6 +1114,17 @@ def recommend_music(song, music, similarity):
         recommended_names.append(music.iloc[i[0]].song)
     return recommended_names, recommended_posters
 
+@st.cache_resource
+def load_music_data():
+    """Load music data with caching to prevent memory issues"""
+    try:
+        music = pickle.load(open('df.pkl', 'rb'))
+        similarity = pickle.load(open('similarity_songs.pkl', 'rb'))
+        return music, similarity
+    except Exception as e:
+        st.error(f"Error loading music data: {e}")
+        return None, None
+
 def show_music():
     st.markdown('<h1>🎵 Music Recommender</h1>', unsafe_allow_html=True)
     st.markdown("""
@@ -1116,27 +1132,43 @@ def show_music():
         <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=1200&h=300&fit=crop" alt="Music">
     </div>
     """, unsafe_allow_html=True)
+    
     try:
-        music = pickle.load(open('df.pkl', 'rb'))
-        similarity = pickle.load(open('similarity_songs.pkl', 'rb'))
+        # Load data with caching
+        with st.spinner('Loading music database...'):
+            music, similarity = load_music_data()
+        
+        if music is None or similarity is None:
+            st.error("Failed to load music data. Please try refreshing the page.")
+            return
+        
         st.markdown("### Select a song to get recommendations")
         music_list = music['song'].values
         selected_song = st.selectbox("Choose a song:", music_list, key='music_select')
+        
         if st.button('Get Recommendations', key='music_btn'):
             with st.spinner('Finding similar songs...'):
-                names, posters = recommend_music(selected_song, music, similarity)
-                if not names:
-                    st.warning("Selected song not found in the database.")
-                    return
-                cols = st.columns(5)
-                for idx, col in enumerate(cols):
-                    with col:
-                        st.markdown(f'**{names[idx]}**')
-                        st.image(posters[idx], use_container_width=True)
+                try:
+                    names, posters = recommend_music(selected_song, music, similarity)
+                    if not names:
+                        st.warning("Selected song not found in the database.")
+                        return
+                    cols = st.columns(5)
+                    for idx, col in enumerate(cols):
+                        with col:
+                            st.markdown(f'**{names[idx]}**')
+                            st.image(posters[idx], use_container_width=True)
+                except Exception as e:
+                    st.error(f"Error generating recommendations: {str(e)}")
+                    st.info("Try selecting a different song or refresh the page.")
+                    
     except FileNotFoundError:
         st.error("Music data files not found. Please ensure 'df.pkl' and 'similarity_songs.pkl' are in the directory.")
+    except MemoryError:
+        st.error("⚠️ Memory limit exceeded. The music recommendation feature requires significant memory. Please try again later or contact support.")
     except Exception as e:
-        st.error(f"Error: {e}")
+        st.error(f"Unexpected error: {str(e)}")
+        st.info("Please refresh the page and try again.")
 
 def fetch_anime_poster(anime_name):
     try:
