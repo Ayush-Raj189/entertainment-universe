@@ -17,7 +17,7 @@ def download_models():
         'movie_dict.pkl': '11RvGNvRH-2smDTLrdJ2ZcOLPHquvRTRq',
         'similarity_movies.pkl': '1IoPdFVTqj5NwBpW1jQyArQ670UjU1Lss',
         'similarity_songs.pkl': '1gjHEUt7hl4VNN4gzQKGzX2-LQtf52PT4',
-        'popular.pkl': '1uLOJUn5sD1-Bnm_vDsONESsvImzBCAsG',
+        'popular.pkl': '1WpWPollZN9En8kKiJp3O2DTbUpXv7zhD',
         'pt.pkl': '1bUSMUwKhHZS4CN9KTX-XbFq8iT9TPvQs',
         'books.pkl': '1kNQJKArgKIpz7NmznYARuqSG-N0PR3jp',
         'similarity_scores.pkl': '1W6FN-BIDd7kSSqLWaZOHgfMnUobBtqMv',
@@ -29,13 +29,24 @@ def download_models():
         'games.pkl': '1XiOSLzOx3HDcT8kwZZqgeh02DowbLbYG',
         'cosine_sim.pkl': '1305Z_qsv8rjdb_7MxH9rh-4AkizQOycq'
     }
+ 
+      failed_files = []
     for filename, file_id in files_to_download.items():
         if not os.path.exists(filename):
             print(f"File {filename} missing. Downloading...")
             url = f'https://drive.google.com/uc?id={file_id}'
-            gdown.download(url, filename, quiet=False, fuzzy=True)
+            try:
+                gdown.download(url, filename, quiet=False, fuzzy=True)
+                print(f"✓ Successfully downloaded {filename}")
+            except Exception as e:
+                print(f"✗ Failed to download {filename}: {str(e)}")
+                failed_files.append(filename)
         else:
             print(f"File {filename} already exists, skipping.")
+    
+    if failed_files:
+        print(f"\n⚠️  Warning: Failed to download {len(failed_files)} file(s): {', '.join(failed_files)}")
+        print("The app will continue, but some features may not work.")
 
 download_models()
 
