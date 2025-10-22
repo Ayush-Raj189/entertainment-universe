@@ -5,8 +5,6 @@ import numpy as np
 import requests
 import time
 from functools import lru_cache
-import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
 import html
 import os
 from dotenv import load_dotenv
@@ -16,12 +14,10 @@ def download_models():
     files_to_download = {
         'movie_dict.pkl': '11RvGNvRH-2smDTLrdJ2ZcOLPHquvRTRq',
         'similarity_movies.pkl': '1IoPdFVTqj5NwBpW1jQyArQ670UjU1Lss',
-        'similarity_songs.pkl': '1gjHEUt7hl4VNN4gzQKGzX2-LQtf52PT4',
         'popular.pkl': '1uLOJUn5sD1-Bnm_vDsONESsvImzBCAsG',
         'pt.pkl': '1bUSMUwKhHZS4CN9KTX-XbFq8iT9TPvQs',
         'books.pkl': '1kNQJKArgKIpz7NmznYARuqSG-N0PR3jp',
         'similarity_scores.pkl': '1W6FN-BIDd7kSSqLWaZOHgfMnUobBtqMv',
-        'df.pkl': '18Wv2fsQIAZjaYtoOJVS5WgpbccoVifVS',
         'anime.pkl': '1MURQo1nQurTAMCPmPURluK6NbDvdnWJR',
         'similarity_anime.pkl': '1GsrqNetSz8sW2G-NK01jiXDIkWgmptcc',
         'anime_indices.pkl': '1Dwj3Vlsx-FuB5ghChtycaCH16T2nEYvA',
@@ -54,12 +50,8 @@ load_dotenv()
 
 # Get API keys from environment variables or Streamlit secrets
 try:
-    SPOTIFY_CLIENT_ID = st.secrets.get("SPOTIFY_CLIENT_ID", os.getenv('SPOTIFY_CLIENT_ID', '5d63c8dd552d458d84c1db09fb2aa897'))
-    SPOTIFY_CLIENT_SECRET = st.secrets.get("SPOTIFY_CLIENT_SECRET", os.getenv('SPOTIFY_CLIENT_SECRET', '55422e4759a541a2ad3625e83a88bd8e'))
     TMDB_API_KEY = st.secrets.get("TMDB_API_KEY", os.getenv('TMDB_API_KEY', '84f51736bbe0caea6e528d85d1a56234'))
 except:
-    SPOTIFY_CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID', '5d63c8dd552d458d84c1db09fb2aa897')
-    SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET', '55422e4759a541a2ad3625e83a88bd8e')
     TMDB_API_KEY = os.getenv('TMDB_API_KEY', '84f51736bbe0caea6e528d85d1a56234')
 
 # ============================ Page Config and CSS ============================
@@ -71,7 +63,6 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# [All your CSS - keeping it exactly as is]
 st.markdown("""
 <style>
     @keyframes gradientShift {
@@ -668,6 +659,48 @@ st.markdown("""
         font-style: italic;
     }
 
+    .anime-card {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+        padding: 10px;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        animation: fadeInUp 0.6s ease;
+        animation-fill-mode: both;
+    }
+    
+    .anime-card:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-10px) scale(1.05);
+        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.5);
+    }
+    
+    .anime-image {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+    }
+    
+    .anime-card:hover .anime-image {
+        transform: scale(1.05);
+    }
+    
+    .anime-title {
+        color: #fff;
+        margin-top: 10px;
+        font-weight: bold;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        text-align: center;
+    }
+
     .footer {
         background: linear-gradient(135deg, rgba(20, 20, 40, 0.95) 0%, rgba(30, 30, 60, 0.95) 100%);
         backdrop-filter: blur(15px);
@@ -829,8 +862,6 @@ with st.sidebar:
         st.session_state.page = 'movies'
     if st.button("📚 Books Recommender", use_container_width=True):
         st.session_state.page = 'books'
-    if st.button("🎵 Music Recommender", use_container_width=True):
-        st.session_state.page = 'music'
     if st.button("🎌 Anime Recommender", use_container_width=True):
         st.session_state.page = 'anime'
     if st.button("🎮 Game Recommender", use_container_width=True):
@@ -840,11 +871,10 @@ from streamlit_autorefresh import st_autorefresh
 
 def show_home():
     carousel_images = [
-        ("https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1200&h=400&fit=crop", "🎬 Movies"),
+        ("https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=1200&h=400&fit=crop", "🎬 Movies"),
         ("https://images.unsplash.com/photo-1524578271613-d550eacf6090?w=1200&h=400&fit=crop", "📚 Books"),
-        ("https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=1200&h=400&fit=crop", "🎵 Music"),
         ("https://images.unsplash.com/photo-1578632767115-351597cf2477?w=1200&h=400&fit=crop", "🎌 Anime"),
-        ("https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=1200&h=400&fit=crop", "🎮 Games"),
+        ("https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=1200&h=400&fit=crop", "🎮 Games"),
     ]
 
     count = st_autorefresh(interval=10000, limit=None, key="autorefresh")
@@ -870,7 +900,6 @@ def show_home():
                 Discover personalized recommendations across 
                 <span class="highlight-text">movies</span>, 
                 <span class="highlight-text">books</span>, 
-                <span class="highlight-text">music</span>, 
                 <span class="highlight-text">anime</span>, and 
                 <span class="highlight-text">games</span>
             </p>
@@ -899,10 +928,9 @@ def show_home():
     st.markdown("### 🎪 Browse by Category")
     cat_cols = st.columns(2)
     left_cats = [("🎬", "Movies", "Get personalized movie recommendations."),
-                 ("🎵", "Music", "Discover new songs similar to your favorites."),
-                 ("🎮", "Games", "Find free-to-play games you'll love.")]
+                 ("🎌", "Anime", "Find anime similar to your favorites.")]
     right_cats = [("📚", "Books", "Explore trending books and personalized reads."),
-                  ("🎌", "Anime", "Find anime similar to your favorites.")]
+                  ("🎮", "Games", "Find free-to-play games you'll love.")]
 
     for icon, title, desc in left_cats:
         cat_cols[0].markdown(f"<div class='feature-card'><div style='font-size:48px;'>{icon}</div><div style='color:white;font-weight:bold;'>{title}</div><div style='color:#ccc;'>{desc}</div></div>", unsafe_allow_html=True)
@@ -951,7 +979,7 @@ def show_movies():
     st.markdown('<h1>🎬 Movie Recommender</h1>', unsafe_allow_html=True)
     st.markdown("""
     <div class="header-image-container">
-        <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1200&h=300&fit=crop" alt="Movies">
+        <img src="https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=1200&h=300&fit=crop" alt="Movies">
     </div>
     """, unsafe_allow_html=True)
     try:
@@ -982,6 +1010,11 @@ def show_books():
         st.session_state.book_page = "popular"
 
     st.markdown("<h1 style='text-align:center;'>📚 Books Section</h1>", unsafe_allow_html=True)
+    st.markdown("""
+    <div class="header-image-container">
+        <img src="https://images.unsplash.com/photo-1524578271613-d550eacf6090?w=1200&h=300&fit=crop" alt="Books">
+    </div>
+    """, unsafe_allow_html=True)
     st.markdown("<br>", unsafe_allow_html=True)
     c1, c2 = st.columns(2)
     with c1:
@@ -1085,91 +1118,6 @@ def show_books():
         except Exception as e:
             st.error(f"Error during recommendation: {e}")
 
-def get_song_album_cover(song_name, artist_name):
-    try:
-        client_credentials_manager = SpotifyClientCredentials(
-            client_id=SPOTIFY_CLIENT_ID, 
-            client_secret=SPOTIFY_CLIENT_SECRET
-        )
-        sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
-        search_query = f"track:{song_name} artist:{artist_name}"
-        results = sp.search(q=search_query, type="track")
-        if results and results["tracks"]["items"]:
-            track = results["tracks"]["items"][0]
-            return track["album"]["images"][0]["url"]
-        return "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=400&h=600&fit=crop"
-    except:
-        return "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=400&h=600&fit=crop"
-
-def recommend_music(song, music, similarity):
-    if song not in music['song'].values:
-        return [], []
-    index = music[music['song'] == song].index[0]
-    distances = sorted(list(enumerate(similarity[index])), reverse=True, key=lambda x: x[1])
-    recommended_names = []
-    recommended_posters = []
-    for i in distances[1:6]:
-        artist = music.iloc[i[0]].artist
-        recommended_posters.append(get_song_album_cover(music.iloc[i[0]].song, artist))
-        recommended_names.append(music.iloc[i[0]].song)
-    return recommended_names, recommended_posters
-
-@st.cache_resource
-def load_music_data():
-    """Load music data with caching to prevent memory issues"""
-    try:
-        music = pickle.load(open('df.pkl', 'rb'))
-        similarity = pickle.load(open('similarity_songs.pkl', 'rb'))
-        return music, similarity
-    except Exception as e:
-        st.error(f"Error loading music data: {e}")
-        return None, None
-
-def show_music():
-    st.markdown('<h1>🎵 Music Recommender</h1>', unsafe_allow_html=True)
-    st.markdown("""
-    <div class="header-image-container">
-        <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=1200&h=300&fit=crop" alt="Music">
-    </div>
-    """, unsafe_allow_html=True)
-    
-    try:
-        # Load data with caching
-        with st.spinner('Loading music database...'):
-            music, similarity = load_music_data()
-        
-        if music is None or similarity is None:
-            st.error("Failed to load music data. Please try refreshing the page.")
-            return
-        
-        st.markdown("### Select a song to get recommendations")
-        music_list = music['song'].values
-        selected_song = st.selectbox("Choose a song:", music_list, key='music_select')
-        
-        if st.button('Get Recommendations', key='music_btn'):
-            with st.spinner('Finding similar songs...'):
-                try:
-                    names, posters = recommend_music(selected_song, music, similarity)
-                    if not names:
-                        st.warning("Selected song not found in the database.")
-                        return
-                    cols = st.columns(5)
-                    for idx, col in enumerate(cols):
-                        with col:
-                            st.markdown(f'**{names[idx]}**')
-                            st.image(posters[idx], use_container_width=True)
-                except Exception as e:
-                    st.error(f"Error generating recommendations: {str(e)}")
-                    st.info("Try selecting a different song or refresh the page.")
-                    
-    except FileNotFoundError:
-        st.error("Music data files not found. Please ensure 'df.pkl' and 'similarity_songs.pkl' are in the directory.")
-    except MemoryError:
-        st.error("⚠️ Memory limit exceeded. The music recommendation feature requires significant memory. Please try again later or contact support.")
-    except Exception as e:
-        st.error(f"Unexpected error: {str(e)}")
-        st.info("Please refresh the page and try again.")
-
 def fetch_anime_poster(anime_name):
     try:
         url = f"https://api.jikan.moe/v4/anime?q={anime_name}&limit=1"
@@ -1241,11 +1189,9 @@ def show_anime():
                             poster_url = fetch_anime_poster(row['name'])
                             
                             st.markdown(f"""
-                            <div style="text-align: center;">
-                                <img src="{poster_url}" style="width: 100%; height: 300px; object-fit: cover; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
-                                <div style="color: white; margin-top: 10px; font-weight: bold; height: 60px; display: flex; align-items: center; justify-content: center; font-size: 14px;">
-                                    {html.escape(row['name'])}
-                                </div>
+                            <div class="anime-card">
+                                <img src="{poster_url}" class="anime-image" alt="{html.escape(row['name'])}">
+                                <div class="anime-title">{html.escape(row['name'])}</div>
                             </div>
                             """, unsafe_allow_html=True)
 
@@ -1265,11 +1211,9 @@ def show_anime():
                                     anime_name = names[idx]
                                     
                                     st.markdown(f"""
-                                    <div style="text-align: center;">
-                                        <img src="{poster_url}" style="width: 100%; height: 300px; object-fit: cover; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
-                                        <div style="color: white; margin-top: 10px; font-weight: bold; height: 60px; display: flex; align-items: center; justify-content: center; font-size: 14px;">
-                                            {html.escape(anime_name)}
-                                        </div>
+                                    <div class="anime-card">
+                                        <img src="{poster_url}" class="anime-image" alt="{html.escape(anime_name)}">
+                                        <div class="anime-title">{html.escape(anime_name)}</div>
                                     </div>
                                     """, unsafe_allow_html=True)
                 else:
@@ -1298,7 +1242,7 @@ def show_games():
     st.markdown('<h1>🎮 Game Recommender</h1>', unsafe_allow_html=True)
     st.markdown("""
     <div class="header-image-container">
-        <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=1200&h=300&fit=crop" alt="Games">
+        <img src="https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=1200&h=300&fit=crop" alt="Games">
     </div>
     """, unsafe_allow_html=True)
 
@@ -1351,8 +1295,6 @@ elif st.session_state.page == 'movies':
     show_movies()
 elif st.session_state.page == 'books':
     show_books()
-elif st.session_state.page == 'music':
-    show_music()
 elif st.session_state.page == 'anime':
     show_anime()
 elif st.session_state.page == 'games':
@@ -1365,7 +1307,7 @@ st.markdown("""
     <div class="footer-content">
         <div class="footer-title">🎬 Entertainment Universe 🎮</div>
         <div class="footer-icons">
-            🎬 📚 🎵 🎌 🎮
+            🎬 📚 🎌 🎮
         </div>
         <div style="margin: 15px 0;">
             <span style="font-size: 18px;">Made with ❤️ by <strong>Ayush</strong></span>
