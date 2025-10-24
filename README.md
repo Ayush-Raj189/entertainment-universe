@@ -7,6 +7,12 @@ Movies, Books,Anime, and Games — all in one stunning Streamlit app built to ma
 
 ---
 
+## 🌐 Live Demo
+
+🚀 **Try it now:** [Entertainment Universe Live App](https://entertainment-universe.streamlit.app/)
+
+
+
 ## ✨ Features
 
 | 🎭 Category | 💡 Description |
